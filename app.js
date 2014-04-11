@@ -29,20 +29,49 @@ if ('development' == app.get('env')) {
 }
 
 // CORS
-app.all('*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
- });
+// app.all('*', function(req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//   next();
+//  });
 
 
 app.get('/', routes.index);
 
-app.get('/songOn/*', function(req, res, next) {
-  console.log('req.route.method:', req.route.method);
-  res.redirect('/newdir' + req.url);
+app.get('/go/*', function(req, res, next) {
+  console.log('req.route.method:', req.route.method, req.url);
+  var newUrl = transformUrl(req.url);
+  res.redirect(newUrl);
+
+  // CORS
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+
   next();
 });
+
+function transformUrl(oldPath) {
+  // replace "/go/*"  to  "/*"
+  oldPath = oldPath.substring(3);
+  oldPath = decodeURIComponent(oldPath);
+  
+  if(oldPath.indexOf('/media/julio/4 H-MP3 (1,36 TB)/') >= 0){
+    return oldPath.replace('/media/julio/4 H-MP3 (1,36 TB)/', '/MP3-01/');
+  }
+  if(oldPath.indexOf('/media/julio/B21AB1E71AB1A92D/') >= 0){
+    return oldPath.replace('/media/julio/B21AB1E71AB1A92D/', '/MP3-02/');
+  }
+  if(oldPath.indexOf('/media/julio/2GB, new/') >= 0){
+    return oldPath.replace('/media/julio/2GB, new/', '/MP3-03/');
+  }
+  if(oldPath.indexOf('/media/julio/Files/') >= 0){
+    return oldPath.replace('/media/julio/Files/', '/MP3-04/');
+  }
+  if(oldPath.indexOf('/home/julio/Música/') >= 0){
+    return oldPath.replace('/home/julio/Música/', '/MP3-05/');
+  }
+};
+
 
 // static local files
 // TODO: this must be configurable
