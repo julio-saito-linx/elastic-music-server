@@ -35,7 +35,14 @@ app.all('*', function(req, res, next) {
   next();
  });
 
+
 app.get('/', routes.index);
+
+app.get('/songOn/*', function(req, res, next) {
+  console.log('req.route.method:', req.route.method);
+  res.redirect('/newdir' + req.url);
+  next();
+});
 
 // static local files
 // TODO: this must be configurable
