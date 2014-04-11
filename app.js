@@ -28,8 +28,22 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+// CORS
+app.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+ });
+
 app.get('/', routes.index);
-app.get('/users', user.list);
+
+// static local files
+// TODO: this must be configurable
+app.use('/MP3-01', express.static( '/media/julio/4 H-MP3 (1,36 TB)/' ));
+app.use('/MP3-02', express.static( '/media/julio/B21AB1E71AB1A92D/' ));
+app.use('/MP3-03', express.static( '/media/julio/2GB, new/' ));
+app.use('/MP3-04', express.static( '/media/julio/Files/' ));
+app.use('/MP3-05', express.static( '/home/julio/Música/' ));
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
